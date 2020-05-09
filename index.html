@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Medi pad </title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </head>
+  <body style="background-color: azure;">
+    <h1 style="text-align: center; font-weight: bold;font-family: sans-serif;margin-top: 50px;border-radius: 50px;border-color: brown;">Month-Wise Patient Records</h1>
+
+    <canvas style="margin-top:80px"id="myChart" width="400" height="200"></canvas>
+
+    <script>
+       
+       window.addEventListener('load', setup);
+      
+
+      async function setup() {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const globalTemps = await getData();
+        const globalTemps1 = await getData1();
+        const globalTemps2 = await getData2();
+        const myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+            datasets: [
+              {
+                label: 'Cancer Patients',
+                data: globalTemps.temps,
+                fill: false,
+                borderColor: 'rgba(255,0,0,0.4)',
+                backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                borderWidth: 1,
+                
+              },
+              {
+                label: 'TB Patients',
+                data: globalTemps1.temps,
+                fill: false,
+                borderColor: 'rgba(255,255,0,0.4)',
+                backgroundColor: 'rgba(255,255,0,0.5)',
+                borderWidth: 1
+
+              },
+              {
+                label: 'Maleriya Patients',
+                data: globalTemps2.temps,
+                fill:false,
+                borderColor:'rgba(128,0,128,0.2)',
+                backgroundColor:'rgba(128,0,128,0.5)',
+                borderWidth:1
+
+              }
+            ]
+          },
+          options: {}
+        });
+      }
+        async function getData() {
+        const response = await fetch('cancer.csv');
+        
+        const data = await response.text();
+        const years = [];
+        const temps = [];
+        const rows = data.split('\n').slice(1);
+        rows.forEach(row => {
+          const cols = row.split(',');
+          years.push(cols[0]);
+          temps.push(cols[0]);
+        });
+        return { years, temps };
+      }
+      async function getData1() {
+        const response = await fetch('Tub.csv');
+        const data = await response.text();
+        const years = [];
+        const temps = [];
+        const rows = data.split('\n').slice(1);
+        rows.forEach(row => {
+          const cols = row.split(',');
+          years.push(cols[0]);
+          temps.push(cols[0]);
+        });
+        return { years, temps };
+      }
+      async function getData2() {
+        const response = await fetch('Mal.csv');
+        const data = await response.text();
+        const years = [];
+        const temps = [];
+        const rows = data.split('\n').slice(1);
+        rows.forEach(row => {
+          const cols = row.split(',');
+          years.push(cols[0]);
+          temps.push(cols[0]);
+        });
+        return { years, temps };
+      }
+    </script>
+  </body>
+</html>
